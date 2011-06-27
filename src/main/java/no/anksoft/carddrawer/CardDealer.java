@@ -1,5 +1,9 @@
 package no.anksoft.carddrawer;
 
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 
@@ -10,6 +14,8 @@ public class CardDealer {
 	private final CardStatus cardStatus[];
 	private final int highest;
 	private CardDealerLogger cardDealerLogger;
+	
+	private Map<Player, List<Integer>> playerCards = new Hashtable<Player, List<Integer>>();
 
 	public CardDealer(int highest) {
 		this.highest = highest;
@@ -51,9 +57,19 @@ public class CardDealer {
 		} 
 		cardsLeft--;
 		cardStatus[draw] = CardStatus.DRAWN;
-		int result = draw+1;
-		cardDealerLogger.drewCard(result, player);
-		return result;
+		int cardNo = draw+1;
+		dealCard(player,cardNo);
+		cardDealerLogger.drewCard(cardNo, player);
+		return cardNo;
+	}
+
+	private void dealCard(Player player, int cardNo) {
+		List<Integer> cardList = playerCards.get(player);
+		if (cardList == null) {
+			cardList = new ArrayList<Integer>();
+			playerCards.put(player, cardList);
+		}
+		cardList.add(cardNo);
 	}
 
 	private void putDiscardedCardsBackInDeck() {
@@ -96,6 +112,10 @@ public class CardDealer {
 
 	public void setCardDealerLogger(CardDealerLogger cardDealerLogger) {
 		this.cardDealerLogger = cardDealerLogger;
+	}
+
+	public List<Integer> playerCards(Player player) {
+		return playerCards.get(player);
 	}
 
 
