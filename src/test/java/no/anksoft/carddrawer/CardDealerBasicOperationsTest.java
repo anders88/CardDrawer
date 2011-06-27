@@ -19,6 +19,7 @@ import org.mockito.InOrder;
 public class CardDealerBasicOperationsTest {
 	private CardDealer cardDealer = new CardDealer(10);
 	private Random random = mock(Random.class);
+	private Player player = new Player("Player");
 
 	@Test
 	public void shouldHaveAllCardsInDrawPileFromTheStart() throws Exception {
@@ -28,7 +29,7 @@ public class CardDealerBasicOperationsTest {
 	@Test
 	public void shouldDrawACard() throws Exception {
 		when(random.nextInt(10)).thenReturn(3);
-		assertThat(cardDealer.drawCard()).isEqualTo(4);
+		assertThat(cardDealer.drawCard(player)).isEqualTo(4);
 		assertThat(cardDealer.numberOfCardsInDrawpile()).isEqualTo(9);
 	}
 
@@ -37,8 +38,8 @@ public class CardDealerBasicOperationsTest {
 	public void shouldNotDrawTheSameCardMoreThanOnce() throws Exception {
 		when(random.nextInt(anyInt())).thenReturn(3);
 		
-		assertThat(cardDealer.drawCard()).isEqualTo(4);
-		assertThat(cardDealer.drawCard()).isEqualTo(5);
+		assertThat(cardDealer.drawCard(player)).isEqualTo(4);
+		assertThat(cardDealer.drawCard(player)).isEqualTo(5);
 
 		assertThat(cardDealer.numberOfCardsInDrawpile()).isEqualTo(8);
 		
@@ -55,7 +56,7 @@ public class CardDealerBasicOperationsTest {
 		drawCards(10);
 
 		try {
-			cardDealer.drawCard();
+			cardDealer.drawCard(player);
 			Assert.fail("Expected exception");
 		} catch (IllegalStateException e) {
 		}
@@ -70,7 +71,7 @@ public class CardDealerBasicOperationsTest {
 
 		cardDealer.discardCard(8);
 		
-		assertThat(cardDealer.drawCard()).isEqualTo(8);
+		assertThat(cardDealer.drawCard(player)).isEqualTo(8);
 	}
 	
 	@Test
@@ -82,13 +83,13 @@ public class CardDealerBasicOperationsTest {
 		cardDealer.discardCard(8);
 		cardDealer.putCardOutOfPlay(7);
 		
-		assertThat(cardDealer.drawCard()).isEqualTo(8);
+		assertThat(cardDealer.drawCard(player)).isEqualTo(8);
 		
 	}
 
 	private void drawCards(int times) {
 		for (int i=0;i<times;i++) {
-			cardDealer.drawCard();
+			cardDealer.drawCard(player);
 		}
 		
 	}

@@ -33,7 +33,7 @@ public class CardDealer {
 		
 	}
 
-	public int drawCard() {
+	public int drawCard(Player player) {
 		if (cardsLeft == 0) {
 			putDiscardedCardsBackInDeck();
 			if (cardsLeft == 0) {
