@@ -57,6 +57,7 @@ public class CardDealer {
 	}
 
 	private void putDiscardedCardsBackInDeck() {
+		cardDealerLogger.shuffledDiscardPileIntoDrawPile();
 		for (int i=0;i<highest-1;i++) {
 			if (cardStatus[i] == CardStatus.DISCARDED) {
 				cardStatus[i] = CardStatus.IN_DRAW_DECK;
@@ -66,11 +67,13 @@ public class CardDealer {
 	}
 
 	public void discardCard(int cardNumber) {
+		cardDealerLogger.discardedCard(cardNumber);
 		int cardIndex = calculateCardIndex(cardNumber);
 		updateDiscardStatus(cardIndex, CardStatus.DISCARDED);
 	}
 
 	public void putCardOutOfPlay(int cardNumber) {
+		cardDealerLogger.putCardOutOfPlay(cardNumber);
 		int cardIndex = calculateCardIndex(cardNumber);
 		updateDiscardStatus(cardIndex, CardStatus.OUT_OF_PLAY);
 	}

@@ -4,6 +4,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -42,7 +43,8 @@ public class CardDealerBasicOperationsTest {
 		when(random.nextInt(anyInt())).thenReturn(3);
 		
 		assertThat(cardDealer.drawCard(player)).isEqualTo(4);
-		assertThat(cardDealer.drawCard(player)).isEqualTo(5);
+		Player playerTwo = new Player("PlayerTwo");
+		assertThat(cardDealer.drawCard(playerTwo)).isEqualTo(5);
 
 		assertThat(cardDealer.numberOfCardsInDrawpile()).isEqualTo(8);
 		
@@ -50,6 +52,9 @@ public class CardDealerBasicOperationsTest {
 		
 		order.verify(random).nextInt(10);
 		order.verify(random).nextInt(9);
+		verify(cardDealerLogger).drewCard(4, player);
+		verify(cardDealerLogger).drewCard(5, playerTwo);
+		verify(cardDealerLogger,never()).shuffledDiscardPileIntoDrawPile();
 	}
 	
 	@Test
@@ -73,8 +78,10 @@ public class CardDealerBasicOperationsTest {
 		drawCards(10);
 
 		cardDealer.discardCard(8);
+		verify(cardDealerLogger).discardedCard(8);
 		
 		assertThat(cardDealer.drawCard(player)).isEqualTo(8);
+		verify(cardDealerLogger).shuffledDiscardPileIntoDrawPile();
 	}
 	
 	@Test
@@ -87,6 +94,8 @@ public class CardDealerBasicOperationsTest {
 		cardDealer.putCardOutOfPlay(7);
 		
 		assertThat(cardDealer.drawCard(player)).isEqualTo(8);
+		verify(cardDealerLogger).discardedCard(8);
+		verify(cardDealerLogger).putCardOutOfPlay(7);
 		
 	}
 
