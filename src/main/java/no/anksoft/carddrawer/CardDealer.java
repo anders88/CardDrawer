@@ -1,4 +1,4 @@
-package no.anksoft.CardDrawer;
+package no.anksoft.carddrawer;
 
 import java.util.Random;
 

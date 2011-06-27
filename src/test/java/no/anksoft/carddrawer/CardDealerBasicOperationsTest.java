@@ -1,4 +1,4 @@
-package no.anksoft.CardDrawer;
+package no.anksoft.carddrawer;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Matchers.anyInt;
@@ -10,11 +10,13 @@ import java.util.Random;
 
 import junit.framework.Assert;
 
+import no.anksoft.carddrawer.CardDealer;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 
-public class CardDrawerTest {
+public class CardDealerBasicOperationsTest {
 	private CardDealer cardDealer = new CardDealer(10);
 	private Random random = mock(Random.class);
 
