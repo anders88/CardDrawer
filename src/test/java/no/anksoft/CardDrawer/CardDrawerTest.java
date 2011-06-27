@@ -8,6 +8,8 @@ import static org.mockito.Mockito.when;
 
 import java.util.Random;
 
+import junit.framework.Assert;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -42,6 +44,27 @@ public class CardDrawerTest {
 		
 		order.verify(random).nextInt(10);
 		order.verify(random).nextInt(9);
+	}
+	
+	@Test
+	public void shouldThrowIllegalStateExceptionWhenThereAreNoMoreCards() throws Exception {
+		when(random.nextInt(anyInt())).thenReturn(0);
+		
+		drawCards(10);
+
+		try {
+			cardDealer.drawCard();
+			Assert.fail("Expected exception");
+		} catch (IllegalStateException e) {
+		}
+		
+	}
+
+	private void drawCards(int times) {
+		for (int i=0;i<times;i++) {
+			cardDealer.drawCard();
+		}
+		
 	}
 
 	@Before

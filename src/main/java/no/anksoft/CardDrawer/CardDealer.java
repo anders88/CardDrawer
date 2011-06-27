@@ -32,6 +32,9 @@ public class CardDealer {
 	}
 
 	public int drawCard() {
+		if (cardsLeft == 0) {
+			throw new IllegalStateException("There are no cards left");
+		}
 		int randomSeed = random.nextInt(cardsLeft);
 		int draw = -1;
 		for (int pos=0;pos<=randomSeed;pos++) {
