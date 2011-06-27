@@ -98,6 +98,14 @@ public class CardDealerBasicOperationsTest {
 		verify(cardDealerLogger).putCardOutOfPlay(7);
 		
 	}
+	
+	@Test
+	public void shouldGiveDiscardedCards() throws Exception {
+		cardDealer.discardCard(5);
+		cardDealer.discardCard(7);
+		
+		assertThat(cardDealer.discardedCards()).containsOnly(5,7);
+	}
 
 	private void drawCards(int times) {
 		for (int i=0;i<times;i++) {

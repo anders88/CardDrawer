@@ -122,5 +122,15 @@ public class CardDealer {
 		return playerCards.get(player);
 	}
 
+	public Set<Integer> discardedCards() {
+		HashSet<Integer> discarded = new HashSet<Integer>();
+		for (int cardIndex=0;cardIndex<cardStatus.length;cardIndex++) {
+			if (cardStatus[cardIndex] == CardStatus.DISCARDED) {
+				discarded.add(cardIndex+1);
+			}
+		}
+		return discarded;
+	}
+
 
 }
