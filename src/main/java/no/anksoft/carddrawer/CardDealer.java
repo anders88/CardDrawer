@@ -1,10 +1,10 @@
 package no.anksoft.carddrawer;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 
 public class CardDealer {
@@ -15,7 +15,7 @@ public class CardDealer {
 	private final int highest;
 	private CardDealerLogger cardDealerLogger;
 	
-	private Map<Player, List<Integer>> playerCards = new Hashtable<Player, List<Integer>>();
+	private Map<Player, Set<Integer>> playerCards = new Hashtable<Player, Set<Integer>>();
 
 	public CardDealer(int highest) {
 		this.highest = highest;
@@ -47,6 +47,7 @@ public class CardDealer {
 				throw new IllegalStateException("There are no cards left");
 			}
 		}
+		
 		int randomSeed = random.nextInt(cardsLeft);
 		int draw = -1;
 		for (int pos=0;pos<=randomSeed;pos++) {
@@ -57,6 +58,7 @@ public class CardDealer {
 		} 
 		cardsLeft--;
 		cardStatus[draw] = CardStatus.DRAWN;
+		
 		int cardNo = draw+1;
 		dealCard(player,cardNo);
 		cardDealerLogger.drewCard(cardNo, player);
@@ -64,9 +66,9 @@ public class CardDealer {
 	}
 
 	private void dealCard(Player player, int cardNo) {
-		List<Integer> cardList = playerCards.get(player);
+		Set<Integer> cardList = playerCards.get(player);
 		if (cardList == null) {
-			cardList = new ArrayList<Integer>();
+			cardList = new HashSet<Integer>();
 			playerCards.put(player, cardList);
 		}
 		cardList.add(cardNo);
@@ -83,22 +85,24 @@ public class CardDealer {
 	}
 
 	public void discardCard(int cardNumber) {
+		updateDiscardStatus(cardNumber, CardStatus.DISCARDED);
 		cardDealerLogger.discardedCard(cardNumber);
-		int cardIndex = calculateCardIndex(cardNumber);
-		updateDiscardStatus(cardIndex, CardStatus.DISCARDED);
 	}
 
 	public void putCardOutOfPlay(int cardNumber) {
 		cardDealerLogger.putCardOutOfPlay(cardNumber);
-		int cardIndex = calculateCardIndex(cardNumber);
-		updateDiscardStatus(cardIndex, CardStatus.OUT_OF_PLAY);
+		updateDiscardStatus(cardNumber, CardStatus.OUT_OF_PLAY);
 	}
 
-	private void updateDiscardStatus(int cardIndex, CardStatus discardStatus) {
+	private void updateDiscardStatus(int cardNumber, CardStatus discardStatus) {
+		int cardIndex = calculateCardIndex(cardNumber);
 		CardStatus oldStatus = cardStatus[cardIndex];
 		cardStatus[cardIndex] = discardStatus;
 		if (oldStatus == CardStatus.IN_DRAW_DECK) {
 			cardsLeft--;
+		}
+		for (Set<Integer> playersCards : playerCards.values()) {
+			playersCards.remove(cardNumber);
 		}
 	}
 
@@ -114,7 +118,7 @@ public class CardDealer {
 		this.cardDealerLogger = cardDealerLogger;
 	}
 
-	public List<Integer> playerCards(Player player) {
+	public Set<Integer> playerCards(Player player) {
 		return playerCards.get(player);
 	}
 

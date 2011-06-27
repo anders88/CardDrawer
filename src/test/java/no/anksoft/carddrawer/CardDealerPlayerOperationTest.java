@@ -29,6 +29,22 @@ public class CardDealerPlayerOperationTest {
 		assertThat(cardDealer.playerCards(playerTwo)).containsOnly(2);
 	}
 	
+	@Test
+	public void shouldHandleDiscardedCards() throws Exception {
+		when(random.nextInt(anyInt())).thenReturn(0);
+		Player playerOne = new Player("PlayerOne");
+		
+		cardDealer.drawCard(playerOne);
+		cardDealer.drawCard(playerOne);
+		cardDealer.drawCard(playerOne);
+
+		cardDealer.discardCard(2);
+		cardDealer.putCardOutOfPlay(3);
+		
+		assertThat(cardDealer.playerCards(playerOne)).containsOnly(1);
+		
+	}
+	
 	@Before
 	public void setup() {
 		cardDealer.setRandom(random);
