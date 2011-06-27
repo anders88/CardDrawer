@@ -4,6 +4,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Random;
@@ -19,7 +20,8 @@ import org.mockito.InOrder;
 public class CardDealerBasicOperationsTest {
 	private CardDealer cardDealer = new CardDealer(10);
 	private Random random = mock(Random.class);
-	private Player player = new Player("Player");
+	private Player player = new Player("PlayerOne");
+	private CardDealerLogger cardDealerLogger = mock(CardDealerLogger.class);
 
 	@Test
 	public void shouldHaveAllCardsInDrawPileFromTheStart() throws Exception {
@@ -31,6 +33,7 @@ public class CardDealerBasicOperationsTest {
 		when(random.nextInt(10)).thenReturn(3);
 		assertThat(cardDealer.drawCard(player)).isEqualTo(4);
 		assertThat(cardDealer.numberOfCardsInDrawpile()).isEqualTo(9);
+		verify(cardDealerLogger).drewCard(4,player);
 	}
 
 	
@@ -97,5 +100,6 @@ public class CardDealerBasicOperationsTest {
 	@Before
 	public void setup() {
 		cardDealer.setRandom(random);
+		cardDealer.setCardDealerLogger(cardDealerLogger);
 	}
 }

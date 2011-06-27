@@ -28,4 +28,9 @@ public class Player {
 	public int hashCode() {
 		return name != null ? name.hashCode() : -1;
 	}
+	
+	@Override
+	public String toString() {
+		return "Player<" + name + ">";
+	}
 }

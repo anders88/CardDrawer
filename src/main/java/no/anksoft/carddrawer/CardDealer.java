@@ -9,6 +9,7 @@ public class CardDealer {
 	private int cardsLeft;
 	private final CardStatus cardStatus[];
 	private final int highest;
+	private CardDealerLogger cardDealerLogger;
 
 	public CardDealer(int highest) {
 		this.highest = highest;
@@ -50,7 +51,9 @@ public class CardDealer {
 		} 
 		cardsLeft--;
 		cardStatus[draw] = CardStatus.DRAWN;
-		return draw+1;
+		int result = draw+1;
+		cardDealerLogger.drewCard(result, player);
+		return result;
 	}
 
 	private void putDiscardedCardsBackInDeck() {
@@ -86,6 +89,10 @@ public class CardDealer {
 		}
 		int cardIndex = cardNumber-1;
 		return cardIndex;
+	}
+
+	public void setCardDealerLogger(CardDealerLogger cardDealerLogger) {
+		this.cardDealerLogger = cardDealerLogger;
 	}
 
 
