@@ -1,6 +1,5 @@
 package no.anksoft.carddrawer;
 
-import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
@@ -143,6 +142,29 @@ public class CardDealer {
 			}
 		}
 		return discarded;
+	}
+
+	public Map<Integer, String> giveFullReport() {
+		Hashtable<Integer, String> report = new Hashtable<Integer, String>();
+		for (int cardIndex = 0; cardIndex < highest; cardIndex++) {
+			int cardNumber = cardIndex+1;
+			CardStatus status = cardStatus[cardIndex];
+			StringBuilder reportText = new StringBuilder(status.getDescription());
+			if (status == CardStatus.DRAWN) {
+				reportText.append(ownerOfCard(cardNumber));
+			}
+			report.put(cardNumber, reportText.toString());
+		}
+		return report;
+	}
+
+	private String ownerOfCard(int cardNumber) {
+		for (Player player : playerCards.keySet()) {
+			if (playerCards.get(player).contains(cardNumber)) {
+				return player.getName();
+			}
+		}
+		throw new IllegalStateException("Did not find owner of card " + cardNumber);
 	}
 
 
