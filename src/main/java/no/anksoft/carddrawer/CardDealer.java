@@ -1,5 +1,6 @@
 package no.anksoft.carddrawer;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
@@ -123,14 +124,27 @@ public class CardDealer {
 	}
 
 	public Set<Integer> discardedCards() {
+		return makeListOfCardsWithStatus(CardStatus.DISCARDED);
+	}
+
+	public Set<Integer> outOfPlayCards() {
+		return makeListOfCardsWithStatus(CardStatus.OUT_OF_PLAY);
+	}
+
+	public Set<Integer> cardsInDrawpile() {
+		return makeListOfCardsWithStatus(CardStatus.IN_DRAW_DECK);
+	}
+
+	private Set<Integer> makeListOfCardsWithStatus(CardStatus status) {
 		HashSet<Integer> discarded = new HashSet<Integer>();
 		for (int cardIndex=0;cardIndex<cardStatus.length;cardIndex++) {
-			if (cardStatus[cardIndex] == CardStatus.DISCARDED) {
+			if (cardStatus[cardIndex] == status) {
 				discarded.add(cardIndex+1);
 			}
 		}
 		return discarded;
 	}
+
 
 
 }

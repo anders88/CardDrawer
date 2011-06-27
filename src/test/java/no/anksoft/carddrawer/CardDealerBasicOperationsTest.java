@@ -106,6 +106,19 @@ public class CardDealerBasicOperationsTest {
 		
 		assertThat(cardDealer.discardedCards()).containsOnly(5,7);
 	}
+	
+	@Test
+	public void shouldGiveListOfCardThatIsOutOfPlay() throws Exception {
+		cardDealer.putCardOutOfPlay(3);
+		cardDealer.putCardOutOfPlay(6);
+		
+		assertThat(cardDealer.outOfPlayCards()).containsOnly(3,6);
+	}
+	
+	@Test
+	public void shouldGiveListOfCardThatIsInDeck() throws Exception {
+		assertThat(cardDealer.cardsInDrawpile()).containsOnly(1,2,3,4,5,6,7,8,9,10);
+	}
 
 	private void drawCards(int times) {
 		for (int i=0;i<times;i++) {
