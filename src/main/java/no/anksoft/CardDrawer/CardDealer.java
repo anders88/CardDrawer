@@ -63,15 +63,29 @@ public class CardDealer {
 	}
 
 	public void discardCard(int cardNumber) {
+		int cardIndex = calculateCardIndex(cardNumber);
+		updateDiscardStatus(cardIndex, CardStatus.DISCARDED);
+	}
+
+	public void putCardOutOfPlay(int cardNumber) {
+		int cardIndex = calculateCardIndex(cardNumber);
+		updateDiscardStatus(cardIndex, CardStatus.OUT_OF_PLAY);
+	}
+
+	private void updateDiscardStatus(int cardIndex, CardStatus discardStatus) {
+		CardStatus oldStatus = cardStatus[cardIndex];
+		cardStatus[cardIndex] = discardStatus;
+		if (oldStatus == CardStatus.IN_DRAW_DECK) {
+			cardsLeft--;
+		}
+	}
+
+	private int calculateCardIndex(int cardNumber) {
 		if ((cardNumber < 1) || (cardNumber > highest)) {
 			throw new IllegalArgumentException("Card number must between 1 and " + highest);
 		}
 		int cardIndex = cardNumber-1;
-		CardStatus oldStatus = cardStatus[cardIndex];
-		cardStatus[cardIndex] = CardStatus.DISCARDED;
-		if (oldStatus == CardStatus.IN_DRAW_DECK) {
-			cardsLeft--;
-		}
+		return cardIndex;
 	}
 
 
