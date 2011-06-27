@@ -8,8 +8,10 @@ public class CardDealer {
 	private Random random;
 	private int cardsLeft;
 	private final CardStatus cardStatus[];
+	private final int highest;
 
 	public CardDealer(int highest) {
+		this.highest = highest;
 		this.cardsLeft = highest;
 		this.cardStatus = initCardStatus(highest);
 	}
@@ -33,7 +35,10 @@ public class CardDealer {
 
 	public int drawCard() {
 		if (cardsLeft == 0) {
-			throw new IllegalStateException("There are no cards left");
+			putDiscardedCardsBackInDeck();
+			if (cardsLeft == 0) {
+				throw new IllegalStateException("There are no cards left");
+			}
 		}
 		int randomSeed = random.nextInt(cardsLeft);
 		int draw = -1;
@@ -46,6 +51,27 @@ public class CardDealer {
 		cardsLeft--;
 		cardStatus[draw] = CardStatus.DRAWN;
 		return draw+1;
+	}
+
+	private void putDiscardedCardsBackInDeck() {
+		for (int i=0;i<highest-1;i++) {
+			if (cardStatus[i] == CardStatus.DISCARDED) {
+				cardStatus[i] = CardStatus.IN_DRAW_DECK;
+				cardsLeft++;
+			}
+		}
+	}
+
+	public void discardCard(int cardNumber) {
+		if ((cardNumber < 1) || (cardNumber > highest)) {
+			throw new IllegalArgumentException("Card number must between 1 and " + highest);
+		}
+		int cardIndex = cardNumber-1;
+		CardStatus oldStatus = cardStatus[cardIndex];
+		cardStatus[cardIndex] = CardStatus.DISCARDED;
+		if (oldStatus == CardStatus.IN_DRAW_DECK) {
+			cardsLeft--;
+		}
 	}
 
 

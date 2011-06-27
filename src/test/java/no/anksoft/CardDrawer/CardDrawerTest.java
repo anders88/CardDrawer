@@ -59,6 +59,17 @@ public class CardDrawerTest {
 		}
 		
 	}
+	
+	@Test
+	public void shouldPutDiscardedCardsBackIntoDeckWhenCardsRunOut() throws Exception {
+		when(random.nextInt(anyInt())).thenReturn(0);
+		
+		drawCards(10);
+
+		cardDealer.discardCard(8);
+		
+		assertThat(cardDealer.drawCard()).isEqualTo(8);
+	}
 
 	private void drawCards(int times) {
 		for (int i=0;i<times;i++) {
