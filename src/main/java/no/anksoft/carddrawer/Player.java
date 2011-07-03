@@ -33,4 +33,8 @@ public class Player {
 	public String toString() {
 		return "Player<" + name + ">";
 	}
+
+	public static Player withName(String name) {
+		return new Player(name);
+	}
 }

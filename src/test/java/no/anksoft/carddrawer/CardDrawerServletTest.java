@@ -16,15 +16,15 @@ import org.junit.Test;
 
 public class CardDrawerServletTest {
 
+	private CardDrawerServlet servlet = new CardDrawerServlet();
+	private HttpServletRequest req = mock(HttpServletRequest.class);
+	private HttpServletResponse resp = mock(HttpServletResponse.class);
+
 	@Test
 	public void shouldDisplayLoginScreen() throws Exception {
-		CardDrawerServlet servlet = new CardDrawerServlet();
-		HttpServletRequest req = mock(HttpServletRequest.class);
-		HttpServletResponse resp = mock(HttpServletResponse.class);
-
-		when(req.getMethod()).thenReturn("GET");
 		StringWriter htmlSource = new StringWriter();
 		when(resp.getWriter()).thenReturn(new PrintWriter(htmlSource));
+		when(req.getMethod()).thenReturn("GET");
 		
 		servlet.service(req, resp);
 		
@@ -36,5 +36,18 @@ public class CardDrawerServletTest {
 			.contains("<input type='submit' name='loginPlayer' value='Login'") //
 		;
 		DocumentHelper.parseText(htmlSource.toString());
+	}
+	
+	@Test
+	public void shouldLoginPlayer() throws Exception {
+		when(req.getMethod()).thenReturn("POST");
+		when(req.getParameter("player_name")).thenReturn("Darth");
+		
+		CardDrawerDao cardDrawerDao = mock(CardDrawerDao.class);
+		servlet.setCardDrawerDao(cardDrawerDao);
+		
+		servlet.service(req, resp);
+	
+		verify(cardDrawerDao).login(Player.withName("Darth"));
 	}
 }
