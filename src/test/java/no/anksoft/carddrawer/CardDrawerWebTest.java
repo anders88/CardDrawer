@@ -28,7 +28,7 @@ public class CardDrawerWebTest {
 		browser.findElement(By.name("loginPlayer")).click();
 		
 		assertThat(browser.getPageSource()).contains("Player Darth");
-		assertThat(browser.getCurrentUrl()).contains("cardDrawer/status");
+		assertThat(browser.getCurrentUrl()).contains("cardDrawer/status.html");
 	}
 
 	private HtmlUnitDriver createBrowser() {
