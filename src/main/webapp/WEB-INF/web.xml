@@ -1,0 +1,10 @@
+<webapp>
+	<servlet>
+		<servlet-name>cardDrawerServlet</servlet-name>
+		<servlet-class>no.anksoft.carddrawer.CardDrawerServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>cardDrawerServlet</servlet-name>
+		<url-pattern>cardDrawer/*</url-pattern>
+	</servlet-mapping>
+</webapp>
