@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class CardDrawerServlet extends HttpServlet {
 
@@ -18,6 +19,26 @@ public class CardDrawerServlet extends HttpServlet {
 			throws ServletException, IOException {
 		resp.setContentType("text/html");
 		PrintWriter writer = resp.getWriter();
+		if ("/login.html".equals(req.getPathInfo())) {
+			displayLoginScreen(writer);
+		} else {
+			displayStatus(writer,req.getSession());
+		}
+	}
+
+	private void displayStatus(PrintWriter writer, HttpSession session) {
+		Player player = (Player) session.getAttribute("player");
+		writer //
+			.append("<html><body>")
+			.append("Player: ")
+			.append(player.getName())
+			.append("<br/>")
+			.append("</body></html>")
+		;
+					
+	}
+
+	private void displayLoginScreen(PrintWriter writer) {
 		writer //
 				.append("<form action='login.html' method='POST'>") //
 				.append("<input type='text' name='player_name' value=''/>") //
@@ -27,9 +48,22 @@ public class CardDrawerServlet extends HttpServlet {
 	}
 	
 	@Override
+	public void init() throws ServletException {
+		super.init();
+		cardDrawerDao = new CardDrawerDao() {
+			@Override
+			public void login(Player olayers) {
+			}
+		};
+	}
+	
+	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		cardDrawerDao.login(Player.withName(req.getParameter("player_name")));
+		Player player = Player.withName(req.getParameter("player_name"));
+		cardDrawerDao.login(player);
+		req.getSession().setAttribute("player", player);
+		resp.sendRedirect("cardDrawer/status.html");
 	}
 
 	public void setCardDrawerDao(CardDrawerDao cardDrawerDao) {
