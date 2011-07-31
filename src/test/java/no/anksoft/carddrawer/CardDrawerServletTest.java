@@ -24,6 +24,8 @@ public class CardDrawerServletTest {
 	private HttpServletResponse resp = mock(HttpServletResponse.class);
 	private HttpSession session = mock(HttpSession.class);
 	private StringWriter htmlSource = new StringWriter();
+	private Player player = Player.withName("Darth");
+	private CardDrawerDao cardDrawerDao = mock(CardDrawerDao.class);
 
 	@Test
 	public void shouldDisplayLoginScreen() throws Exception {
@@ -49,7 +51,8 @@ public class CardDrawerServletTest {
 	@Test
 	public void shouldDisplayStatusScreen() throws Exception {
 		createGetCrequest("/status.html");
-		when(session.getAttribute("player")).thenReturn(Player.withName("Darth"));
+		PlayerStatus playerStatus = mock(PlayerStatus.class);
+		when(cardDrawerDao.getStatus(player)).thenReturn(playerStatus);
 		
 		servlet.service(req, resp);
 		
@@ -66,20 +69,19 @@ public class CardDrawerServletTest {
 		when(req.getMethod()).thenReturn("POST");
 		when(req.getParameter("player_name")).thenReturn("Darth");
 		
-		CardDrawerDao cardDrawerDao = mock(CardDrawerDao.class);
-		servlet.setCardDrawerDao(cardDrawerDao);
 		
 		servlet.service(req, resp);
 	
-		Player darth = Player.withName("Darth");
-		verify(cardDrawerDao).login(darth);
+		verify(cardDrawerDao).login(player);
 		verify(resp).sendRedirect("cardDrawer/status.html");
-		verify(session).setAttribute("player", darth);
+		verify(session).setAttribute("player", player);
 	}
 
 	@Before
 	public void setup() throws IOException {
 		when(req.getSession()).thenReturn(session);
 		when(resp.getWriter()).thenReturn(new PrintWriter(htmlSource));
+		when(session.getAttribute("player")).thenReturn(player);
+		servlet.setCardDrawerDao(cardDrawerDao);
 	}
 }

@@ -50,11 +50,6 @@ public class CardDrawerServlet extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		cardDrawerDao = new CardDrawerDao() {
-			@Override
-			public void login(Player olayers) {
-			}
-		};
 	}
 	
 	@Override

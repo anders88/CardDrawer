@@ -2,6 +2,7 @@ package no.anksoft.carddrawer;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.webapp.WebAppContext;
@@ -13,6 +14,7 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 public class CardDrawerWebTest {
 	@Test
+	@Ignore
 	public void shouldBeAbleToLogInAndSeeStatusScreeen() throws Exception {
 		Server server = new Server(0);
 		server.addHandler(new WebAppContext("src/main/webapp", "/"));

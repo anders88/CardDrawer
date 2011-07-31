@@ -4,4 +4,6 @@ public interface CardDrawerDao {
 
 	void login(Player olayers);
 
+	PlayerStatus getStatus(Player player);
+
 }
