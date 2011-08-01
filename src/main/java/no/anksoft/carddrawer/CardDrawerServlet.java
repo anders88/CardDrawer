@@ -2,6 +2,7 @@ package no.anksoft.carddrawer;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collection;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -28,14 +29,42 @@ public class CardDrawerServlet extends HttpServlet {
 
 	private void displayStatus(PrintWriter writer, HttpSession session) {
 		Player player = (Player) session.getAttribute("player");
+		PlayerStatus status = cardDrawerDao.getStatus(player);
 		writer //
 			.append("<html><body>")
-			.append("Player: ")
-			.append(player.getName())
-			.append("<br/>")
+		;
+		displayValue(writer, "Player", player.getName());
+		displayValue(writer, "Cards left in deck", "" + status.cardsInDrawpile());
+		displayValue(writer, "Your cards", commaSeparated(status.playerCards()));
+		displayValue(writer, "Discarded cards", commaSeparated(status.discardedCards()));
+		displayValue(writer, "Out of play cards", commaSeparated(status.outOfPlayCards()));
+		writer
 			.append("</body></html>")
 		;
 					
+	}
+
+	private String commaSeparated(Collection<Integer> collection) {
+		if ((collection == null) || (collection.isEmpty())) {
+			return "";
+		}
+		StringBuilder result = new StringBuilder();
+		boolean first = true;
+		for (Integer value : collection) {
+			if (!first) {
+				result.append(",");
+			}
+			first = false;
+			result.append(value);
+		}
+		return result.toString();
+	}
+
+	private void displayValue(PrintWriter writer, String label, String value) {
+		writer
+			.append(label +": ")
+			.append(value)
+			.append("<br/>");
 	}
 
 	private void displayLoginScreen(PrintWriter writer) {

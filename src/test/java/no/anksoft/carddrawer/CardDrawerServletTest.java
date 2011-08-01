@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Arrays;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -54,12 +55,22 @@ public class CardDrawerServletTest {
 		PlayerStatus playerStatus = mock(PlayerStatus.class);
 		when(cardDrawerDao.getStatus(player)).thenReturn(playerStatus);
 		
+		when(playerStatus.cardsInDrawpile()).thenReturn(5);
+		when(playerStatus.playerCards()).thenReturn(Arrays.asList(2,3,4));
+		when(playerStatus.discardedCards()).thenReturn(Arrays.asList(6,7,8));
+		when(playerStatus.outOfPlayCards()).thenReturn(Arrays.asList(9,10));
+		
+		
 		servlet.service(req, resp);
 		
 		verify(resp).setContentType("text/html");
 		
 		assertThat(htmlSource.toString()) //
 			.contains("Player: Darth<br/>") //
+			.contains("Your cards: 2,3,4<br/>") //
+			.contains("Cards left in deck: 5<br/>") //
+			.contains("Discarded cards: 6,7,8<br/>") //
+			.contains("Out of play cards: 9,10<br/>") //
 		;
 		DocumentHelper.parseText(htmlSource.toString());
 	}
