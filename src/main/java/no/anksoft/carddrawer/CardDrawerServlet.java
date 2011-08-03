@@ -2,7 +2,6 @@ package no.anksoft.carddrawer;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Collection;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,10 +9,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.velocity.exception.MethodInvocationException;
+import org.apache.velocity.exception.ParseErrorException;
+import org.apache.velocity.exception.ResourceNotFoundException;
+
 public class CardDrawerServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -100236375084824924L;
 	private CardDrawerDao cardDrawerDao;
+	private DisplayStatusForm displayStatusForm = new DisplayStatusForm();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -27,44 +31,12 @@ public class CardDrawerServlet extends HttpServlet {
 		}
 	}
 
-	private void displayStatus(PrintWriter writer, HttpSession session) {
+	private void displayStatus(PrintWriter writer, HttpSession session) throws ParseErrorException, MethodInvocationException, ResourceNotFoundException, IOException {
 		Player player = (Player) session.getAttribute("player");
 		PlayerStatus status = cardDrawerDao.getStatus(player);
-		writer //
-			.append("<html><body>")
-		;
-		displayValue(writer, "Player", player.getName());
-		displayValue(writer, "Cards left in deck", "" + status.cardsInDrawpile());
-		displayValue(writer, "Your cards", commaSeparated(status.playerCards()));
-		displayValue(writer, "Discarded cards", commaSeparated(status.discardedCards()));
-		displayValue(writer, "Out of play cards", commaSeparated(status.outOfPlayCards()));
-		writer
-			.append("</body></html>")
-		;
+		
+		displayStatusForm.write(writer,player,status);
 					
-	}
-
-	private String commaSeparated(Collection<Integer> collection) {
-		if ((collection == null) || (collection.isEmpty())) {
-			return "";
-		}
-		StringBuilder result = new StringBuilder();
-		boolean first = true;
-		for (Integer value : collection) {
-			if (!first) {
-				result.append(",");
-			}
-			first = false;
-			result.append(value);
-		}
-		return result.toString();
-	}
-
-	private void displayValue(PrintWriter writer, String label, String value) {
-		writer
-			.append(label +": ")
-			.append(value)
-			.append("<br/>");
 	}
 
 	private void displayLoginScreen(PrintWriter writer) {

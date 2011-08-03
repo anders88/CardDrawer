@@ -1,0 +1,9 @@
+<html>
+<body>
+Player: ${playerName}<br/>
+Cards left in deck: ${cardsInDrawpile}<br/>
+Your cards: ${playerCards}<br/>
+Discarded cards: ${discardedCards}<br/>
+Out of play cards: ${outOfPlayCards}<br/>
+</body>
+</html>
