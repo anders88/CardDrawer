@@ -1,9 +1,29 @@
 <html>
+<head>
+<title>Card Drawer</title>
+</head>
 <body>
+<h1>Status</h1>
 Player: ${playerName}<br/>
 Cards left in deck: ${cardsInDrawpile}<br/>
 Your cards: ${playerCards}<br/>
 Discarded cards: ${discardedCards}<br/>
 Out of play cards: ${outOfPlayCards}<br/>
+<h1>Actions</h1>
+<a href="drawCard.html">Draw a card</a><br/>
+<form action='discardCard.html' method='POST'>
+<input type='text' name='card_no' value =''/>
+<input type='submit' name='discardCard' value ='Discard card'/>
+</form>
+<form action='discardCard.html' method='POST'>
+<input type='text' name='card_no' value =''/>
+<input type='submit' name='discardCard' value ='Discard card'/>
+</form>
+<br/>
+<form action='outOfPlayCard.html' method='POST'>
+<input type='text' name='card_no' value =''/>
+<input type='submit' name='outOfPlayCard' value ='Put card out of play'/>
+</form>
+<br/>
 </body>
 </html>

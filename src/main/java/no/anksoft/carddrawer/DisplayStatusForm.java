@@ -17,6 +17,7 @@ public class DisplayStatusForm {
 	public void write(PrintWriter writer, Player player, PlayerStatus status) throws ParseErrorException, MethodInvocationException, ResourceNotFoundException, IOException {
 		VelocityEngine engine = new VelocityEngine();
 		VelocityContext context = new VelocityContext();
+
 		context.put("playerName",player.getName());
 		context.put("cardsInDrawpile", "" + status.cardsInDrawpile());
 		context.put("playerCards", commaSeparated(status.playerCards()));
