@@ -6,4 +6,6 @@ public interface CardDrawerDao {
 
 	PlayerStatus getStatus(Player player);
 
+	int drawCard(Player player);
+
 }
